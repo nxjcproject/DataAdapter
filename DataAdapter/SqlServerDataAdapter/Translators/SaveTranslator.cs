@@ -40,8 +40,8 @@ namespace SqlServerDataAdapter.Translators
             sqlInsert.Append(") VALUES (");
             foreach (var item in insert.Values)
             {
-                sqlInsert.Append("@" + item.Key + ",");
-                command.Parameters.Add(ParameterDataNullHelper.ChangeNull("@" + item.Key, item.Value));
+                sqlInsert.Append("@I_" + item.Key + ",");
+                command.Parameters.Add(ParameterDataNullHelper.ChangeNull("@I_" + item.Key, item.Value));
             }
             sqlInsert.Remove(sqlInsert.Length - 1, 1);
             sqlInsert.Append(")");
@@ -79,8 +79,8 @@ namespace SqlServerDataAdapter.Translators
 
             foreach (var item in update.Values)
             {
-                sqlUpdate.Append(item.Key + "=@" + item.Key + ",");
-                command.Parameters.Add(ParameterDataNullHelper.ChangeNull("@" + item.Key, item.Value));
+                sqlUpdate.Append(item.Key + "=@U_" + item.Key + ",");
+                command.Parameters.Add(ParameterDataNullHelper.ChangeNull("@U_" + item.Key, item.Value));
             }
             sqlUpdate.Remove(sqlUpdate.Length - 1, 1);
 

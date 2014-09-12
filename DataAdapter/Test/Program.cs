@@ -17,8 +17,8 @@ namespace Test
         {
             //////////////////////////////////////delete
             Delete delete = new Delete("tableName");
-            delete.AddCriterions("a", "a", "1", CriteriaOperator.NotEqual);
-            delete.AddCriterions("b", "b", "2", CriteriaOperator.Equal);
+            delete.AddCriterions("a", "zhangxin", "1", CriteriaOperator.NotEqual);
+            delete.AddCriterions("b", "2", CriteriaOperator.Equal);
             delete.AddSqlOperator(SqlOperator.OR);
 
             SqlCommand deleteCmd = new SqlCommand();
@@ -35,7 +35,7 @@ namespace Test
                 c = "3"
             };
             Insert<Test> insert = new Insert<Test>("tableName", test);
-            insert.AddExcludeField("c");
+            insert.AddExcludeField("a");
             SqlCommand insertCmd = new SqlCommand();
             SaveTranslator.TranslateIntoInsert<Test>(insert, insertCmd);
             Console.WriteLine(insertCmd.CommandText);
@@ -63,10 +63,10 @@ namespace Test
             ////////////////////////////////////////////////////////////
 
             Query query = new Query("tableName");
-            query.AddCriterion("a", "a", "1", CriteriaOperator.Equal);
+            query.AddCriterion("a", "1", CriteriaOperator.Equal);
             //query.AddCriterion("b", "b", "2", CriteriaOperator.Equal);
             query.AddCriterion("c", "____", CriteriaOperator.Like);
-            query.AddOrderByClause(new OrderByClause("a", true));
+            query.AddOrderByClause(new OrderByClause("a", false));
             //query.AddSqlOperator(SqlOperator.AND);
             SqlCommand queryCmd = new SqlCommand();
             QueryTranslator.TranslateIntoSelect(query, queryCmd);
@@ -77,17 +77,18 @@ namespace Test
             //////////////////////////////////////////////////////////////
 
             ComplexQuery cmquery = new ComplexQuery();
+            
+            IList<NeedField> list = new List<NeedField>();
             NeedField needField = new NeedField
             {
                 TableName = "tableName1",
                 FieldName = "a",
                 VariableName = ""
             };
-            IList<NeedField> list = new List<NeedField>();
             list.Add(needField);
             cmquery.NeedFields = list;
-            cmquery.AddNeedField("tableName2", "b", "b");
-            cmquery.AddNeedField("tableName3", "c", "c");
+            cmquery.AddNeedField("tableName2", "b");
+            cmquery.AddNeedField("tableName3", "c", "test");
             IDictionary<string, string> testjoin = new Dictionary<string, string>();
             testjoin.Add("tableName1", "c1");
             testjoin.Add("tableName2", "c2");
@@ -95,12 +96,12 @@ namespace Test
 
 
             //cmquery.AddJoinCriterion("assss", JoinType.FULL_JOIN);
-            cmquery.AddJoinCriterion(testjoin, JoinType.FULL_JOIN);
+            cmquery.AddJoinCriterion(testjoin, JoinType.INNER_JOIN);
 
 
 
-            cmquery.IsDictinct = true;
-            cmquery.TopNumber = 9;
+            //cmquery.IsDictinct = true;
+            //cmquery.TopNumber = 9;
             cmquery.AddCriterion("a", "a", "1", CriteriaOperator.Equal);
             cmquery.AddCriterion("b", "b", "2", CriteriaOperator.Equal);
             cmquery.AddCriterion("c", "c", "3", CriteriaOperator.Like);
