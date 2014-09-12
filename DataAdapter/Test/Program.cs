@@ -100,7 +100,7 @@ namespace Test
 
 
             cmquery.IsDictinct = true;
-            //cmquery.TopNumber = TopNumber.top1;
+            cmquery.TopNumber = 9;
             cmquery.AddCriterion("a", "a", "1", CriteriaOperator.Equal);
             cmquery.AddCriterion("b", "b", "2", CriteriaOperator.Equal);
             cmquery.AddCriterion("c", "c", "3", CriteriaOperator.Like);

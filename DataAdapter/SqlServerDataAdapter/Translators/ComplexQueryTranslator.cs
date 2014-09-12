@@ -21,7 +21,7 @@ namespace SqlServerDataAdapter.Translators
                 result.Append("DISTINCT ");
             }
 
-            if (complexQuery.TopNumber != TopNumber.numberNull)
+            if (complexQuery.TopNumber!= 0)
             {
                 result.Append(TranslateHelper.GetTopNumber(complexQuery.TopNumber));
             }

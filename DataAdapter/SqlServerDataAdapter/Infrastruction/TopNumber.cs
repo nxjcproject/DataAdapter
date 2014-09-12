@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace SqlServerDataAdapter.Infrastruction
 {
-    public enum TopNumber
+    public class TopNumber
     {
-        numberNull,
-        top1,
-        top10,
+        public int NO { get; set; }
     }
 }

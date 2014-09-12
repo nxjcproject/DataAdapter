@@ -40,7 +40,7 @@ namespace SqlServerDataAdapter
             _criterions = criterions.ToList();
         }
 
-        public TopNumber TopNumber { get; set; }
+        public int TopNumber { get; set; }
         /// <summary>
         /// 必要时使用字段的全称（表名加字段名）
         /// </summary>

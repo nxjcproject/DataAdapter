@@ -32,19 +32,9 @@ namespace SqlServerDataAdapter.Infrastruction
         /// </summary>
         /// <param name="number"></param>
         /// <returns></returns>
-        public static string GetTopNumber(TopNumber number)
+        public static string GetTopNumber(int number)
         {
-            switch (number)
-            {
-                case TopNumber.numberNull:
-                    return "";
-                case TopNumber.top1:
-                    return "TOP 1 ";
-                case TopNumber.top10:
-                    return "TOP 10 ";
-                default:
-                    throw new Exception("错误的查询数量");
-            }
+            return "TOP " + number + " ";
         }
 
         /// <summary>
