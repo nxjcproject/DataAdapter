@@ -63,20 +63,21 @@ namespace SqlServerDataAdapter.Translators
             //删除字段
             foreach (var item in update.ExcludeField)
             {
-                if (update.Vaules.ContainsKey(item.Name))
+                if (update.Values.ContainsKey(item.Name))
                 {
-                    update.Vaules.Remove(item.Name);
+                    update.Values.Remove(item.Name);
                 }
             }
-            foreach (var item in update.Criterions)
-            {
-                if (update.Vaules.ContainsKey(item.FieldName))
-                {
-                    update.Vaules.Remove(item.FieldName);
-                }
-            }
+            //条件列也可能跟新
+            //foreach (var item in update.Criterions)
+            //{
+            //    if (update.Vaules.ContainsKey(item.FieldName))
+            //    {
+            //        update.Vaules.Remove(item.FieldName);
+            //    }
+            //}
 
-            foreach (var item in update.Vaules)
+            foreach (var item in update.Values)
             {
                 sqlUpdate.Append(item.Key + "=@" + item.Key + ",");
                 command.Parameters.Add(ParameterDataNullHelper.ChangeNull("@" + item.Key, item.Value));

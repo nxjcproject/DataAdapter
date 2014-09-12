@@ -47,7 +47,7 @@ namespace SqlServerDataAdapter
         {
             get { return _tableName; }
         }
-        public IDictionary<string, object> Vaules
+        public IDictionary<string, object> Values
         {
             get { return _values; }
             //set { _values = value; }
