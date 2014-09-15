@@ -50,6 +50,7 @@ namespace SqlServerDataAdapter
         public JoinCriterion JoinCriterion
         {
             get { return _joinCriterion; }
+            set { _joinCriterion = value; }
         }
 
         public IEnumerable<NeedField> NeedFields
