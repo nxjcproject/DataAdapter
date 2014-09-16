@@ -80,6 +80,17 @@ namespace SqlServerDataAdapter
         }
 
         /// <summary>
+        /// 添加排序字段
+        /// </summary>
+        /// <param name="feildName"></param>
+        /// <param name="isDesc"></param>
+        public void AddOrderByClause(string feildName, bool isDesc)
+        {
+            OrderByClause order = new OrderByClause(feildName, isDesc);
+            _orderByClause.Add(order);
+        }
+
+        /// <summary>
         /// 连接字段字典，键为表名，值为字段名
         /// </summary>
         /// <param name="joinFieldDictionary"></param>
