@@ -67,6 +67,7 @@ namespace Test
             //query.AddCriterion("b", "b", "2", CriteriaOperator.Equal);
             query.AddCriterion("c", "____", CriteriaOperator.Like);
             query.AddOrderByClause(new OrderByClause("a", false));
+            query.AddOrderByClause(new OrderByClause("b", true));
             //query.AddSqlOperator(SqlOperator.AND);
             SqlCommand queryCmd = new SqlCommand();
             QueryTranslator.TranslateIntoSelect(query, queryCmd);
@@ -105,7 +106,10 @@ namespace Test
             cmquery.AddCriterion("a", "a", "1", CriteriaOperator.Equal);
             cmquery.AddCriterion("b", "b", "2", CriteriaOperator.Equal);
             cmquery.AddCriterion("c", "c", "3", CriteriaOperator.Like);
-            cmquery.OrderByClause = new OrderByClause("a", true);
+            List<OrderByClause> orders = new List<OrderByClause>();
+            orders.Add(new OrderByClause("a", true));
+            orders.Add(new OrderByClause("b", false));
+            cmquery.OrderByClauses = orders;
             SqlCommand cmqueryCmd = new SqlCommand();
             ComplexQueryTranslator.TranslateIntoComplexQuery(cmquery, cmqueryCmd);
             Console.WriteLine(cmqueryCmd.CommandText);

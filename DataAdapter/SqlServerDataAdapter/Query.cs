@@ -12,21 +12,22 @@ namespace SqlServerDataAdapter
         private string _tableName;
         private IList<Criterion> _criterions;
         private SqlOperator _sqlOperator;
-        private OrderByClause _orderByClause;
+        private IList<OrderByClause> _orderByClauses;
 
         public Query(string tableName, IList<Criterion> criterions,
-            SqlOperator sqlOperator, OrderByClause orderByClause)
+            SqlOperator sqlOperator, IList<OrderByClause> orderByClause)
         {
             _tableName = tableName;
             _criterions = criterions;
             _sqlOperator = sqlOperator;
-            _orderByClause = orderByClause;
+            _orderByClauses = orderByClause;
         }
 
         public Query(string tableName)
         {
             _tableName = tableName;
             _criterions = new List<Criterion>();
+            _orderByClauses = new List<OrderByClause>();
         }
 
         private Query()
@@ -49,10 +50,10 @@ namespace SqlServerDataAdapter
             set { _sqlOperator = value; }
         }
 
-        public OrderByClause OrderByClause
+        public IList<OrderByClause> OrderByClauses
         {
-            get { return _orderByClause; }
-            set { _orderByClause = value; }
+            get { return _orderByClauses; }
+            set { _orderByClauses = value; }
         }
 
         public void AddCriterion(string fieldName, string parameterName, object parameterValue, CriteriaOperator criteriaOperator)
@@ -81,7 +82,7 @@ namespace SqlServerDataAdapter
         /// <param name="orderByClause"></param>
         public void AddOrderByClause(OrderByClause orderByClause)
         {
-            _orderByClause = orderByClause;
+            _orderByClauses.Add(orderByClause);
         }
     }
 }

@@ -88,9 +88,17 @@ namespace SqlServerDataAdapter.Infrastruction
         /// </summary>
         /// <param name="orderByClause"></param>
         /// <returns></returns>
-        public static string GetStringFromOrderByClause(OrderByClause orderByClause)
+        public static string GetStringFromOrderByClause(IList<OrderByClause> orderByClauses)
         {
-            return String.Format(" ORDER BY [{0}] {1}", orderByClause.FieldName, orderByClause.Desc ? "DESC" : "ASC");
+            StringBuilder result = new StringBuilder();
+            result.Append(" ORDER BY");
+            foreach (OrderByClause item in orderByClauses)
+            {
+                string itemString = String.Format(" [{0}] {1},", item.FieldName, item.Desc ? "DESC" : "ASC");
+                result.Append(itemString);
+            }
+            result.Remove(result.Length - 1, 1);
+            return result.ToString();
         }
 
         /// <summary>

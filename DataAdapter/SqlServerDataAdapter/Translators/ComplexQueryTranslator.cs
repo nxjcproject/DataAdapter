@@ -39,9 +39,9 @@ namespace SqlServerDataAdapter.Translators
                 TranslateHelper.GetCriterionString(result, complexQuery.Criterions, command, complexQuery.SqlOperator);
             }
 
-            if (complexQuery.OrderByClause != null)
+            if (complexQuery.OrderByClauses.Count > 0)
             {
-                result.Append(TranslateHelper.GetStringFromOrderByClause(complexQuery.OrderByClause));
+                result.Append(TranslateHelper.GetStringFromOrderByClause(complexQuery.OrderByClauses));
             }
 
             command.CommandText = result.ToString();

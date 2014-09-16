@@ -13,11 +13,14 @@ namespace SqlServerDataAdapter
         private JoinCriterion _joinCriterion;
         private IList<Criterion> _criterions;
         private SqlOperator _sqlOperator;
+        private IList<OrderByClause> _orderByClause;
 
         public ComplexQuery()
         {
             _needFields = new List<NeedField>();
             _criterions = new List<Criterion>();
+            _orderByClause = new List<OrderByClause>();
+
         }
 
         public ComplexQuery(IEnumerable<NeedField> needFields, JoinCriterion joinCriterion)
@@ -31,6 +34,7 @@ namespace SqlServerDataAdapter
         {
             _needFields = needFields.ToList();
             _criterions = new List<Criterion>();
+            _orderByClause = new List<OrderByClause>();
         }
 
         public ComplexQuery(JoinCriterion joinCriterion, IEnumerable<NeedField> needFields, IEnumerable<Criterion> criterions)
@@ -44,7 +48,11 @@ namespace SqlServerDataAdapter
         /// <summary>
         /// 必要时使用字段的全称（表名加字段名）
         /// </summary>
-        public OrderByClause OrderByClause { get; set; }
+        public IList<OrderByClause> OrderByClauses
+        {
+            get { return _orderByClause; }
+            set { _orderByClause = value; }
+        }
         public bool IsDictinct { get; set; }
 
         public JoinCriterion JoinCriterion

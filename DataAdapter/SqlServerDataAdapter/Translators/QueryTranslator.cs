@@ -25,9 +25,9 @@ namespace SqlServerDataAdapter.Translators
 
             TranslateHelper.GetCriterionString(selectString, query.Criterions, command, query.SqlOperator);
 
-            if (query.OrderByClause != null)
+            if (query.OrderByClauses.Count() > 0)
             {
-                selectString.Append(TranslateHelper.GetStringFromOrderByClause(query.OrderByClause));
+                selectString.Append(TranslateHelper.GetStringFromOrderByClause(query.OrderByClauses));
             }
 
             command.CommandText = selectString.ToString();
