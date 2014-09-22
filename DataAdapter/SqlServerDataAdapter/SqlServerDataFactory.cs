@@ -225,5 +225,38 @@ namespace SqlServerDataAdapter
             }
             return result;
         }
+        /// <summary>
+        /// 根据连接字符串和参数集合查询数据
+        /// </summary>
+        /// <param name="queryString"></param>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        public DataTable Query(string queryString, SqlParameterCollection parameters)
+        {
+            DataTable result = new DataTable();
+
+            using (SqlConnection conn = new SqlConnection(ConnectionString))
+            {
+                SqlCommand cmd = conn.CreateCommand();
+                cmd.CommandText = queryString;
+                foreach (var item in parameters)
+                {
+                    cmd.Parameters.Add(item);
+                }
+
+                try
+                {
+                    //conn.Open();
+                    SqlDataAdapter ad = new SqlDataAdapter(cmd);
+                    ad.Fill(result);
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception(ex.Source + ":" + ex.Message);
+                }
+            }
+
+            return result;
+        }
     }
 }

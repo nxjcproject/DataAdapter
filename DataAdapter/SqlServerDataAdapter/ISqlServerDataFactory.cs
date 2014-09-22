@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -56,5 +57,12 @@ namespace SqlServerDataAdapter
         /// <param name="complexQuery"></param>
         /// <returns></returns>
         IEnumerable<T> Query<T>(ComplexQuery complexQuery);
+        /// <summary>
+        /// 根据连接字符串和参数集合查询数据
+        /// </summary>
+        /// <param name="queryString"></param>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        DataTable Query(string queryString, SqlParameterCollection parameters);
     }
 }
