@@ -146,6 +146,15 @@ namespace Test
 
             Console.WriteLine(testcri.ParameterName);
             Console.ReadKey();
+
+            SqlServerDataFactory dataFactory = new SqlServerDataFactory("");
+            SqlParameter a = new SqlParameter();
+            SqlParameter b = new SqlParameter("", typeof(int));
+            dataFactory.Query("", a, b);
+            dataFactory.Query("");
+            SqlParameter[] arry = { new SqlParameter(), new SqlParameter("", typeof(int)) };
+            dataFactory.Query("", arry);
+            
         }
     }
 }

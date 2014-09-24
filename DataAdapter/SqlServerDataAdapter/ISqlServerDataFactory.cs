@@ -63,6 +63,24 @@ namespace SqlServerDataAdapter
         /// <param name="queryString"></param>
         /// <param name="parameters"></param>
         /// <returns></returns>
-        DataTable Query(string queryString, SqlParameterCollection parameters);
+        DataTable Query(string queryString, params SqlParameter[] parameters);
+        /// <summary>
+        /// 执行SQL语句
+        /// </summary>
+        /// <param name="sqlString"></param>
+        /// <returns></returns>
+        int ExecuteSQL(string sqlString);
+        /// <summary>
+        /// 执行存储过程
+        /// </summary>
+        /// <param name="sqlString"></param>
+        /// <returns></returns>
+        int ExecuteSQL(string storedProcName, params SqlParameter[] parameters);
+        /// <summary>
+        /// 执行SQL语句或者存储过程
+        /// </summary>
+        /// <param name="sqlString"></param>
+        /// <returns></returns>
+        int ExecuteSQL(string sqlString, bool isStoredProcedure, params SqlParameter[] parameters);
     }
 }
