@@ -63,7 +63,7 @@ namespace Test
             ////////////////////////////////////////////////////////////
 
             Query query = new Query("tableName");
-            query.AddCriterion("a", "1", CriteriaOperator.Equal);
+            query.AddCriterion("a.b", "1", CriteriaOperator.Equal);
             //query.AddCriterion("b", "b", "2", CriteriaOperator.Equal);
             query.AddCriterion("c", "____", CriteriaOperator.Like);
             query.AddOrderByClause(new OrderByClause("a", false));
