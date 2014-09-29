@@ -76,7 +76,7 @@ namespace SqlServerDataAdapter.Infrastruction
                 case CriteriaOperator.Equal:
                     return "=";
                 case CriteriaOperator.NotEqual:
-                    return "!=";
+                    return "<>";
                 case CriteriaOperator.LessThanOrEqual:
                     return "<=";
                 case CriteriaOperator.MoreThanOrEqual:

@@ -17,7 +17,8 @@ namespace Test
         {
             //////////////////////////////////////delete
             Delete delete = new Delete("tableName");
-            delete.AddCriterions("a", "zhangxin", "1", CriteriaOperator.NotEqual);
+            delete.AddCriterions("a", "zhangxin", "1", CriteriaOperator.MoreThan);
+            delete.AddCriterions("a", "zhangdi", 2, CriteriaOperator.LessThan);
             delete.AddCriterions("b", "2", CriteriaOperator.Equal);
             delete.AddSqlOperator(SqlOperator.OR);
 
