@@ -356,5 +356,42 @@ namespace SqlServerDataAdapter
 
             return result;
         }
+        /// <summary>
+        /// 批量插入数据
+        /// </summary>
+        /// <param name="sourceTable"></param>
+        /// <returns></returns>
+        public int Save(string tableName, DataTable sourceTable)
+        {
+            int affected = 0;
+
+            using (SqlConnection conn = new SqlConnection(ConnectionString))
+            {
+                conn.Open();
+                using (SqlTransaction transaction = conn.BeginTransaction())
+                {
+                    using (SqlBulkCopy bulkCopy = new SqlBulkCopy(conn, SqlBulkCopyOptions.CheckConstraints, transaction))
+                    {
+                        bulkCopy.BatchSize = 10;
+                        bulkCopy.BulkCopyTimeout = 60;
+                        bulkCopy.DestinationTableName = tableName;
+                        try
+                        {
+                            bulkCopy.WriteToServer(sourceTable);
+                            transaction.Commit();
+                            affected = sourceTable.Rows.Count;
+                        }
+                        catch (Exception ex)
+                        {
+                            transaction.Rollback();
+                            affected = -1;
+                            //throw new Exception(ex.Source + ":" + ex.Message);
+                        }
+                    }
+                }
+            }
+
+            return affected;
+        }
     }
 }

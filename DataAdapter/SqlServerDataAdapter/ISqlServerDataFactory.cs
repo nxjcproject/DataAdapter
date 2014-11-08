@@ -82,5 +82,11 @@ namespace SqlServerDataAdapter
         /// <param name="sqlString"></param>
         /// <returns></returns>
         int ExecuteSQL(string sqlString, bool isStoredProcedure, params SqlParameter[] parameters);
+        /// <summary>
+        /// 批量插入数据
+        /// </summary>
+        /// <param name="sourceTable"></param>
+        /// <returns></returns>
+        int Save(string tableName, DataTable sourceTable);
     }
 }
