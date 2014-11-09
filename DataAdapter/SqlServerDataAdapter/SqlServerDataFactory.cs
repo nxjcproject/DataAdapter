@@ -275,6 +275,7 @@ namespace SqlServerDataAdapter
 
                 try
                 {
+                    conn.Open();
                     result = cmd.ExecuteNonQuery();
                 }
                 catch (Exception ex)
@@ -306,6 +307,7 @@ namespace SqlServerDataAdapter
 
                 try
                 {
+                    conn.Open();
                     result = cmd.ExecuteNonQuery();
                 }
                 catch (Exception ex)
@@ -346,6 +348,7 @@ namespace SqlServerDataAdapter
 
                 try
                 {
+                    conn.Open();
                     result = cmd.ExecuteNonQuery();
                 }
                 catch (Exception ex)
