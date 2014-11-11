@@ -9,6 +9,7 @@ using System.Data;
 using SqlServerDataAdapter.Translators;
 using AutoMapper;
 using System.Collections;
+using System.Transactions;
 
 namespace SqlServerDataAdapter
 {
@@ -362,8 +363,9 @@ namespace SqlServerDataAdapter
         /// <summary>
         /// 批量插入数据
         /// </summary>
-        /// <param name="sourceTable"></param>
-        /// <returns></returns>
+        /// <param name="tableName">目标数据库名</param>
+        /// <param name="sourceTable">数据源表</param>
+        /// <returns>返回受影响的行数，错误返回-1</returns>
         public int Save(string tableName, DataTable sourceTable)
         {
             int affected = 0;
@@ -395,6 +397,55 @@ namespace SqlServerDataAdapter
             }
 
             return affected;
+        }
+
+        /// <summary>
+        /// 批量更新数据
+        /// </summary>
+        /// <param name="tableName">目标数据库表名</param>
+        /// <param name="sourceTable">数据源表</param>
+        /// <param name="keyColumnName">更新标准字段</param>
+        /// <returns>成功返回受影响的行数，失败返回-1</returns>
+        public int Update(string tableName, DataTable sourceTable, string[] keyColumnName)
+        {
+            int result;
+            string[] columns = TranslateHelper.GetDataTableColumnName(sourceTable, keyColumnName);
+
+            using (TransactionScope scope = new TransactionScope())
+            {
+                try
+                {
+                    foreach (DataRow dr in sourceTable.Rows)
+                    {
+                        List<SqlParameter> parameters = new List<SqlParameter>();
+                        string baseString = "UPDATE ";
+                        StringBuilder updateStr = new StringBuilder();
+                        updateStr.Append(baseString).Append(tableName).Append(" SET ");
+                        foreach (string item in columns)
+                        {
+                            updateStr.Append(item).Append("=@u").Append(item).Append(",");
+                            parameters.Add(new SqlParameter("@u" + item, dr[item]));
+                        }
+                        updateStr.Remove(updateStr.Length - 1, 1);
+                        updateStr.Append(" WHERE ");
+                        foreach (string item in keyColumnName)
+                        {
+                            updateStr.Append(item).Append("=@w").Append(item).Append(" AND ");
+                            parameters.Add(new SqlParameter("@w" + item, dr[item]));
+                        }
+                        updateStr.Remove(updateStr.Length - 5, 5);
+                        ExecuteSQL(updateStr.ToString(), parameters.ToArray());
+                    }
+                    scope.Complete();
+                    result = sourceTable.Rows.Count;
+                }
+                catch
+                {
+                    result = -1;
+                    scope.Dispose();
+                }
+            }
+            return result;
         }
     }
 }

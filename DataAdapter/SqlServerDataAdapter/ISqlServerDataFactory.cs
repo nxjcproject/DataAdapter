@@ -85,8 +85,17 @@ namespace SqlServerDataAdapter
         /// <summary>
         /// 批量插入数据
         /// </summary>
-        /// <param name="sourceTable"></param>
-        /// <returns></returns>
+        /// <param name="tableName">目标数据库名</param>
+        /// <param name="sourceTable">数据源表</param>
+        /// <returns>返回受影响的行数，错误返回-1</returns>
         int Save(string tableName, DataTable sourceTable);
+        /// <summary>
+        /// 批量更新数据
+        /// </summary>
+        /// <param name="tableName">目标数据库表名</param>
+        /// <param name="sourceTable">源数据表</param>
+        /// <param name="keyColumnName">更新标准字段</param>
+        /// <returns>成功返回受影响的行数，失败返回-1</returns>
+        int Update(string tableName, DataTable sourceTable,string[] keyColumnName);
     }
 }

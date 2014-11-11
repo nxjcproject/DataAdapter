@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -242,6 +243,20 @@ namespace SqlServerDataAdapter.Infrastruction
                 default:
                     throw new Exception("没有对应的连接方式");
             }
+        }
+
+        public static string[] GetDataTableColumnName(DataTable dt, string[] excludeColumn)
+        {
+            IList<string> result = new List<string>();
+
+            foreach (DataColumn item in dt.Columns)
+            {
+                if (!excludeColumn.Contains(item.ColumnName))
+                {
+                    result.Add(item.ColumnName);
+                }
+            }
+            return result.ToArray();
         }
     }
 }
