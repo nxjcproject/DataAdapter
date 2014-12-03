@@ -66,6 +66,16 @@ namespace SqlServerDataAdapter.Infrastruction
         }
 
         /// <summary>
+        /// 通过NULLCriterion生成WHERE语句后的判断字符串
+        /// </summary>
+        /// <param name="criterion"></param>
+        /// <returns></returns>
+        public static string GetStringFromNULLCriterion(Criterion criterion)
+        {
+            return String.Format("[{0}] IS NULL", criterion.FieldName);
+        }
+
+        /// <summary>
         /// 通过CriteriaOperator获得判断符号（“=”，“<=”等）
         /// </summary>
         /// <param name="criteriaOperator"></param>
@@ -86,6 +96,8 @@ namespace SqlServerDataAdapter.Infrastruction
                     return "<";
                 case CriteriaOperator.MoreThan:
                     return ">";
+                case CriteriaOperator.NULL:
+                    return "IS NULL";
                 default:
                     throw new ApplicationException("No operator defined.");
             }
@@ -134,14 +146,25 @@ namespace SqlServerDataAdapter.Infrastruction
                 stringBuilder.Append(" WHERE ");
                 foreach (var item in criterions)
                 {
-                    if (item.CriteriaOperator != CriteriaOperator.Like)
+                    if (item.CriteriaOperator == CriteriaOperator.Like)
                     {
                         if (_isNotfirstFilterClause == true)
                         {
                             stringBuilder.Append(TranslateHelper.GetStringFromSqlOperator(sqlOperator));
                         }
-                        stringBuilder.Append(TranslateHelper.GetStringFromCriterion(item));
-                        command.Parameters.Add(ParameterDataNullHelper.ChangeNull("@" + item.ParameterName, item.ParameterValue));
+                        stringBuilder.Append(TranslateHelper.GetFuzzyStringFromCriterion(item));
+                        //command.Parameters.Add(ParameterDataNullHelper.ChangeNull("@" + item.ParameterName, item.ParameterValue));
+
+                        _isNotfirstFilterClause = true;
+                    }
+                    else if (item.CriteriaOperator == CriteriaOperator.NULL)
+                    {
+                        if (_isNotfirstFilterClause == true)
+                        {
+                            stringBuilder.Append(TranslateHelper.GetStringFromSqlOperator(sqlOperator));
+                        }
+                        stringBuilder.Append(TranslateHelper.GetStringFromNULLCriterion(item));
+                        //command.Parameters.Add(ParameterDataNullHelper.ChangeNull("@" + item.ParameterName, item.ParameterValue));
 
                         _isNotfirstFilterClause = true;
                     }
@@ -151,8 +174,8 @@ namespace SqlServerDataAdapter.Infrastruction
                         {
                             stringBuilder.Append(TranslateHelper.GetStringFromSqlOperator(sqlOperator));
                         }
-                        stringBuilder.Append(TranslateHelper.GetFuzzyStringFromCriterion(item));
-                        //command.Parameters.Add(ParameterDataNullHelper.ChangeNull("@" + item.ParameterName, item.ParameterValue));
+                        stringBuilder.Append(TranslateHelper.GetStringFromCriterion(item));
+                        command.Parameters.Add(ParameterDataNullHelper.ChangeNull("@" + item.ParameterName, item.ParameterValue));
 
                         _isNotfirstFilterClause = true;
                     }

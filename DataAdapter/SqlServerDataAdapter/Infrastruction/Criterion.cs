@@ -68,6 +68,7 @@ namespace SqlServerDataAdapter.Infrastruction
         MoreThanOrEqual,
         MoreThan,
         Like,
+        NULL,
         NotApplicable
     }
 }
