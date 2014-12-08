@@ -390,7 +390,7 @@ namespace SqlServerDataAdapter
                         {
                             transaction.Rollback();
                             affected = -1;
-                            //throw new Exception(ex.Source + ":" + ex.Message);
+                            throw new Exception(ex.Source + ":" + ex.Message);
                         }
                     }
                 }
@@ -439,10 +439,11 @@ namespace SqlServerDataAdapter
                     scope.Complete();
                     result = sourceTable.Rows.Count;
                 }
-                catch
+                catch (Exception ex)
                 {
                     result = -1;
                     scope.Dispose();
+                    throw new Exception(ex.Source + ":" + ex.Message);
                 }
             }
             return result;
