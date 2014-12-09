@@ -448,5 +448,55 @@ namespace SqlServerDataAdapter
             }
             return result;
         }
+        /// <summary>
+        /// 批量插入数据
+        /// </summary>
+        /// <param name="tableName">目标数据库表名</param>
+        /// <param name="sourceTable">源数据表</param>
+        /// <param name="excludeColumnName">需排除字段</param>
+        /// <returns>返回受影响的行数</returns>
+        public int Insert(string tableName, DataTable sourceTable, string[] excludeColumnName)
+        {
+            int result;
+            string[] columns = TranslateHelper.GetDataTableColumnName(sourceTable, excludeColumnName);
+
+            using (TransactionScope scope = new TransactionScope())
+            {
+                try
+                {
+                    foreach (DataRow dr in sourceTable.Rows)
+                    {
+                        List<SqlParameter> parameters = new List<SqlParameter>();
+                        string baseString = "INSERT INTO ";
+                        StringBuilder insertStr = new StringBuilder();
+                        insertStr.Append(baseString).Append(tableName);
+
+                        StringBuilder columnStr = new StringBuilder("(");
+                        StringBuilder valueStr = new StringBuilder("(") ;
+                        foreach (string item in columns)
+                        {
+                            columnStr.Append(item).Append(",");
+                            valueStr.Append("@I").Append(item).Append(",");
+                            parameters.Add(new SqlParameter("@I" + item, dr[item]));
+                        }
+                        columnStr.Remove(columnStr.Length - 1, 1).Append(")");
+                        valueStr.Remove(valueStr.Length - 1, 1).Append(")");
+                        insertStr.Append(" ").Append(columnStr.ToString());
+                        insertStr.Append(" VALUES ").Append(valueStr.ToString());
+
+                        ExecuteSQL(insertStr.ToString(), parameters.ToArray());
+                    }
+                    scope.Complete();
+                    result = sourceTable.Rows.Count;
+                }
+                catch (Exception ex)
+                {
+                    result = -1;
+                    scope.Dispose();
+                    throw new Exception(ex.Source + ":" + ex.Message);
+                }
+            }
+            return result;
+        }
     }
 }

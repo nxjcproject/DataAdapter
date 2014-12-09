@@ -97,5 +97,13 @@ namespace SqlServerDataAdapter
         /// <param name="keyColumnName">更新标准字段</param>
         /// <returns>成功返回受影响的行数，失败返回-1</returns>
         int Update(string tableName, DataTable sourceTable,string[] keyColumnName);
+        /// <summary>
+        /// 批量插入数据
+        /// </summary>
+        /// <param name="tableName">目标数据库表名</param>
+        /// <param name="sourceTable">源数据表</param>
+        /// <param name="excludeColumnName">需排除字段</param>
+        /// <returns>返回受影响的行数</returns>
+        int Insert(string tableName, DataTable sourceTable, string[] excludeColumnName);
     }
 }

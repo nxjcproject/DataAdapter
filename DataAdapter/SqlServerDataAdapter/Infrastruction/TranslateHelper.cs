@@ -96,8 +96,6 @@ namespace SqlServerDataAdapter.Infrastruction
                     return "<";
                 case CriteriaOperator.MoreThan:
                     return ">";
-                case CriteriaOperator.NULL:
-                    return "IS NULL";
                 default:
                     throw new ApplicationException("No operator defined.");
             }
