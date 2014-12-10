@@ -418,23 +418,8 @@ namespace SqlServerDataAdapter
                     foreach (DataRow dr in sourceTable.Rows)
                     {
                         List<SqlParameter> parameters = new List<SqlParameter>();
-                        string baseString = "UPDATE ";
-                        StringBuilder updateStr = new StringBuilder();
-                        updateStr.Append(baseString).Append(tableName).Append(" SET ");
-                        foreach (string item in columns)
-                        {
-                            updateStr.Append(item).Append("=@u").Append(item).Append(",");
-                            parameters.Add(new SqlParameter("@u" + item, dr[item]));
-                        }
-                        updateStr.Remove(updateStr.Length - 1, 1);
-                        updateStr.Append(" WHERE ");
-                        foreach (string item in keyColumnName)
-                        {
-                            updateStr.Append(item).Append("=@w").Append(item).Append(" AND ");
-                            parameters.Add(new SqlParameter("@w" + item, dr[item]));
-                        }
-                        updateStr.Remove(updateStr.Length - 5, 5);
-                        ExecuteSQL(updateStr.ToString(), parameters.ToArray());
+                        string updateStr = DataTableTranslateHelper.DataRowToUpdate(tableName, dr, columns, keyColumnName, parameters);
+                        ExecuteSQL(updateStr, parameters.ToArray());
                     }
                     scope.Complete();
                     result = sourceTable.Rows.Count;
@@ -467,24 +452,8 @@ namespace SqlServerDataAdapter
                     foreach (DataRow dr in sourceTable.Rows)
                     {
                         List<SqlParameter> parameters = new List<SqlParameter>();
-                        string baseString = "INSERT INTO ";
-                        StringBuilder insertStr = new StringBuilder();
-                        insertStr.Append(baseString).Append(tableName);
-
-                        StringBuilder columnStr = new StringBuilder("(");
-                        StringBuilder valueStr = new StringBuilder("(") ;
-                        foreach (string item in columns)
-                        {
-                            columnStr.Append(item).Append(",");
-                            valueStr.Append("@I").Append(item).Append(",");
-                            parameters.Add(new SqlParameter("@I" + item, dr[item]));
-                        }
-                        columnStr.Remove(columnStr.Length - 1, 1).Append(")");
-                        valueStr.Remove(valueStr.Length - 1, 1).Append(")");
-                        insertStr.Append(" ").Append(columnStr.ToString());
-                        insertStr.Append(" VALUES ").Append(valueStr.ToString());
-
-                        ExecuteSQL(insertStr.ToString(), parameters.ToArray());
+                        string insertStr = DataTableTranslateHelper.DataRowToInsert(tableName, dr, columns, parameters);
+                        ExecuteSQL(insertStr, parameters.ToArray());
                     }
                     scope.Complete();
                     result = sourceTable.Rows.Count;
