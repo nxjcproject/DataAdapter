@@ -27,9 +27,11 @@ namespace SqlServerDataAdapter
             StringBuilder valueStr = new StringBuilder("(");
             foreach (string item in columns)
             {
+                string guid = Guid.NewGuid().ToString().Replace("-", "");
+
                 columnStr.Append(item).Append(",");
-                valueStr.Append("@I").Append(item).Append(",");
-                parameters.Add(new SqlParameter("@I" + item, dr[item]));
+                valueStr.Append("@I").Append(guid).Append(",");
+                parameters.Add(new SqlParameter("@I" + guid, dr[item]));
             }
             columnStr.Remove(columnStr.Length - 1, 1).Append(")");
             valueStr.Remove(valueStr.Length - 1, 1).Append(")");
@@ -55,15 +57,19 @@ namespace SqlServerDataAdapter
             updateStr.Append(baseString).Append(tableName).Append(" SET ");
             foreach (string item in columns)
             {
-                updateStr.Append(item).Append("=@u").Append(item).Append(",");
-                parameters.Add(new SqlParameter("@u" + item, dr[item]));
+                string guid = Guid.NewGuid().ToString().Replace("-", "");
+
+                updateStr.Append(item).Append("=@U").Append(guid).Append(",");
+                parameters.Add(new SqlParameter("@U" + guid, dr[item]));
             }
             updateStr.Remove(updateStr.Length - 1, 1);
             updateStr.Append(" WHERE ");
             foreach (string item in keyColumnName)
             {
-                updateStr.Append(item).Append("=@w").Append(item).Append(" AND ");
-                parameters.Add(new SqlParameter("@w" + item, dr[item]));
+                string guid = Guid.NewGuid().ToString().Replace("-", "");
+
+                updateStr.Append(item).Append("=@W").Append(guid).Append(" AND ");
+                parameters.Add(new SqlParameter("@W" + guid, dr[item]));
             }
             updateStr.Remove(updateStr.Length - 5, 5);
             return updateStr.ToString();

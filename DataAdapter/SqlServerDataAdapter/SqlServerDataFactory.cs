@@ -411,25 +411,31 @@ namespace SqlServerDataAdapter
             int result;
             string[] columns = TranslateHelper.GetDataTableColumnName(sourceTable, keyColumnName);
 
-            using (TransactionScope scope = new TransactionScope())
+            using (SqlConnection conn = new SqlConnection(ConnectionString))
             {
+                conn.Open();
+                SqlTransaction transaction = conn.BeginTransaction();
+                SqlCommand cmd = conn.CreateCommand();
+                cmd.Transaction = transaction;
+
                 try
                 {
                     foreach (DataRow dr in sourceTable.Rows)
                     {
                         List<SqlParameter> parameters = new List<SqlParameter>();
                         string updateStr = DataTableTranslateHelper.DataRowToUpdate(tableName, dr, columns, keyColumnName, parameters);
-                        ExecuteSQL(updateStr, parameters.ToArray());
+                        ExecuteSQLForTransaction(cmd, updateStr, parameters.ToArray());
                     }
-                    scope.Complete();
+                    transaction.Commit();
                     result = sourceTable.Rows.Count;
                 }
                 catch (Exception ex)
                 {
+                    transaction.Rollback();
                     result = -1;
-                    scope.Dispose();
                     throw new Exception(ex.Source + ":" + ex.Message);
                 }
+
             }
             return result;
         }
@@ -445,27 +451,48 @@ namespace SqlServerDataAdapter
             int result;
             string[] columns = TranslateHelper.GetDataTableColumnName(sourceTable, excludeColumnName);
 
-            using (TransactionScope scope = new TransactionScope())
+            using (SqlConnection conn = new SqlConnection(ConnectionString))
             {
+                conn.Open();
+                SqlTransaction transaction = conn.BeginTransaction();
+                SqlCommand cmd = conn.CreateCommand();
+                cmd.Transaction = transaction;
+
                 try
                 {
                     foreach (DataRow dr in sourceTable.Rows)
                     {
                         List<SqlParameter> parameters = new List<SqlParameter>();
                         string insertStr = DataTableTranslateHelper.DataRowToInsert(tableName, dr, columns, parameters);
-                        ExecuteSQL(insertStr, parameters.ToArray());
+                        ExecuteSQLForTransaction(cmd, insertStr, parameters.ToArray());
                     }
-                    scope.Complete();
+                    transaction.Commit();
                     result = sourceTable.Rows.Count;
                 }
                 catch (Exception ex)
                 {
+                    transaction.Rollback();
                     result = -1;
-                    scope.Dispose();
                     throw new Exception(ex.Source + ":" + ex.Message);
                 }
             }
             return result;
+        }
+
+        /// <summary>
+        /// 批处理执行函数
+        /// </summary>
+        /// <param name="cmd"></param>
+        /// <param name="sqlString"></param>
+        /// <param name="parameters"></param>
+        private void ExecuteSQLForTransaction(SqlCommand cmd, string sqlString, params SqlParameter[] parameters)
+        {
+            cmd.CommandText = sqlString;
+            foreach (var item in parameters)
+            {
+                cmd.Parameters.Add(item);
+            }
+            cmd.ExecuteNonQuery();
         }
     }
 }

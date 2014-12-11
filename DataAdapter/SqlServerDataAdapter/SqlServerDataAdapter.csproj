@@ -49,7 +49,7 @@
   <ItemGroup>
     <Compile Include="AutoCreateView.cs" />
     <Compile Include="ComplexQuery.cs" />
-    <Compile Include="DataTableTranslateHelper.cs" />
+    <Compile Include="Infrastruction\DataTableTranslateHelper.cs" />
     <Compile Include="Infrastruction\JoinCriterion.cs" />
     <Compile Include="Infrastruction\JoinType.cs" />
     <Compile Include="Translators\ComplexQueryTranslator.cs" />

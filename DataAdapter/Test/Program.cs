@@ -8,6 +8,7 @@ using SqlServerDataAdapter.Infrastruction;
 using System.Data.SqlClient;
 using SqlServerDataAdapter.Translators;
 using System.Collections;
+using System.Data;
 
 namespace Test
 {
@@ -15,6 +16,29 @@ namespace Test
     {
         static void Main(string[] args)
         {
+            string conn = "Data Source=QH-20140814XCYI;Initial Catalog=Test;Integrated Security=True";
+            SqlServerDataFactory dataFactory = new SqlServerDataFactory(conn);
+            DataTable dttest = new DataTable();
+            DataColumn dc = new DataColumn("d", typeof(string));
+            dttest.Columns.Add(dc);
+
+            DataColumn dc1 = new DataColumn("c", typeof(int));
+            dttest.Columns.Add(dc1);
+
+            DataRow dr = dttest.NewRow();
+            dr["c"] = 2;
+            dr["d"] = "123ss";
+            dttest.Rows.Add(dr);
+            DataRow dr1 = dttest.NewRow();
+            dr1["c"] = 3;
+            dr1["d"] = "123ss";
+            dttest.Rows.Add(dr1);
+            //dataFactory.Insert("B", dttest);
+
+            string[] key = { "c" };
+            dataFactory.Update("B", dttest, key);
+            Console.ReadKey();
+
             //////////////////////////////////////delete
             Delete delete = new Delete("tableName");
             delete.AddCriterions("a", "zhangxin", "1", CriteriaOperator.MoreThan);
@@ -148,13 +172,13 @@ namespace Test
             Console.WriteLine(testcri.ParameterName);
             Console.ReadKey();
 
-            SqlServerDataFactory dataFactory = new SqlServerDataFactory("");
-            SqlParameter a = new SqlParameter();
-            SqlParameter b = new SqlParameter("", typeof(int));
-            dataFactory.Query("", a, b);
-            dataFactory.Query("");
-            SqlParameter[] arry = { new SqlParameter(), new SqlParameter("", typeof(int)) };
-            dataFactory.Query("", arry);
+            //SqlServerDataFactory dataFactory = new SqlServerDataFactory("");
+            //SqlParameter a = new SqlParameter();
+            //SqlParameter b = new SqlParameter("", typeof(int));
+            //dataFactory.Query("", a, b);
+            //dataFactory.Query("");
+            //SqlParameter[] arry = { new SqlParameter(), new SqlParameter("", typeof(int)) };
+            //dataFactory.Query("", arry);
             
         }
     }
