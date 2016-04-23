@@ -42,6 +42,7 @@ namespace SqlServerDataAdapter
             using (SqlConnection conn = new SqlConnection(ConnectionString))
             {
                 SqlCommand cmd = conn.CreateCommand();
+                cmd.CommandTimeout = Config_SqlServerDataFactory.CommandTimeout;
                 DeleteTranslator.TranslateIntoDelete(delete, cmd);
 
                 try
@@ -69,6 +70,7 @@ namespace SqlServerDataAdapter
             using (SqlConnection conn = new SqlConnection(ConnectionString))
             {
                 SqlCommand cmd = conn.CreateCommand();
+                cmd.CommandTimeout = Config_SqlServerDataFactory.CommandTimeout;
                 SaveTranslator.TranslateIntoInsert<T>(insert, cmd);
 
                 try
@@ -96,6 +98,7 @@ namespace SqlServerDataAdapter
             using (SqlConnection conn = new SqlConnection(ConnectionString))
             {
                 SqlCommand cmd = conn.CreateCommand();
+                cmd.CommandTimeout = Config_SqlServerDataFactory.CommandTimeout;
                 SaveTranslator.TranslateIntoUpdate<T>(update, cmd);
 
                 try
@@ -122,6 +125,7 @@ namespace SqlServerDataAdapter
             using (SqlConnection conn = new SqlConnection(ConnectionString))
             {
                 SqlCommand cmd = conn.CreateCommand();
+                cmd.CommandTimeout = Config_SqlServerDataFactory.CommandTimeout;
                 QueryTranslator.TranslateIntoSelect(query, cmd);
 
                 try
@@ -149,6 +153,7 @@ namespace SqlServerDataAdapter
             using (SqlConnection conn = new SqlConnection(ConnectionString))
             {
                 SqlCommand cmd = conn.CreateCommand();
+                cmd.CommandTimeout = Config_SqlServerDataFactory.CommandTimeout;
                 ComplexQueryTranslator.TranslateIntoComplexQuery(complexQuery, cmd);
 
                 try
@@ -178,6 +183,7 @@ namespace SqlServerDataAdapter
             {
                 
                 SqlCommand cmd = conn.CreateCommand();
+                cmd.CommandTimeout = Config_SqlServerDataFactory.CommandTimeout;
                 QueryTranslator.TranslateIntoSelect(query, cmd);
 
                 try
@@ -208,6 +214,7 @@ namespace SqlServerDataAdapter
             using (SqlConnection conn = new SqlConnection(ConnectionString))
             {
                 SqlCommand cmd = conn.CreateCommand();
+                cmd.CommandTimeout = Config_SqlServerDataFactory.CommandTimeout;
                 ComplexQueryTranslator.TranslateIntoComplexQuery(complexQuery, cmd);
 
                 try
@@ -239,6 +246,7 @@ namespace SqlServerDataAdapter
             using (SqlConnection conn = new SqlConnection(ConnectionString))
             {
                 SqlCommand cmd = conn.CreateCommand();
+                cmd.CommandTimeout = Config_SqlServerDataFactory.CommandTimeout;
                 cmd.CommandText = queryString;
                 foreach (var item in parameters)
                 {
@@ -271,6 +279,7 @@ namespace SqlServerDataAdapter
             using (SqlConnection conn = new SqlConnection(ConnectionString))
             {
                 SqlCommand cmd = conn.CreateCommand();
+                cmd.CommandTimeout = Config_SqlServerDataFactory.CommandTimeout;
                 cmd.CommandText = sqlString;
                 cmd.CommandType = CommandType.Text;
 
@@ -299,6 +308,7 @@ namespace SqlServerDataAdapter
             using (SqlConnection conn = new SqlConnection(ConnectionString))
             {
                 SqlCommand cmd = conn.CreateCommand();
+                cmd.CommandTimeout = Config_SqlServerDataFactory.CommandTimeout;
                 cmd.CommandText = sqlString;
                 cmd.CommandType = CommandType.Text;
                 foreach (var item in parameters)
@@ -331,6 +341,7 @@ namespace SqlServerDataAdapter
             using (SqlConnection conn = new SqlConnection(ConnectionString))
             {
                 SqlCommand cmd = conn.CreateCommand();
+                cmd.CommandTimeout = Config_SqlServerDataFactory.CommandTimeout;
                 cmd.CommandText = sqlString;
 
                 if (isStoredProcedure == true)
@@ -416,6 +427,7 @@ namespace SqlServerDataAdapter
                 conn.Open();
                 SqlTransaction transaction = conn.BeginTransaction();
                 SqlCommand cmd = conn.CreateCommand();
+                cmd.CommandTimeout = Config_SqlServerDataFactory.CommandTimeout;
                 cmd.Transaction = transaction;
 
                 try
@@ -456,6 +468,7 @@ namespace SqlServerDataAdapter
                 conn.Open();
                 SqlTransaction transaction = conn.BeginTransaction();
                 SqlCommand cmd = conn.CreateCommand();
+                cmd.CommandTimeout = Config_SqlServerDataFactory.CommandTimeout;
                 cmd.Transaction = transaction;
 
                 try
@@ -493,6 +506,10 @@ namespace SqlServerDataAdapter
                 cmd.Parameters.Add(item);
             }
             cmd.ExecuteNonQuery();
+        }
+        public int GetCommandTimeout()
+        {
+            return Config_SqlServerDataFactory.CommandTimeout;
         }
     }
 }

@@ -105,5 +105,6 @@ namespace SqlServerDataAdapter
         /// <param name="excludeColumnName">需排除字段</param>
         /// <returns>返回受影响的行数</returns>
         int Insert(string tableName, DataTable sourceTable, string[] excludeColumnName);
+        int GetCommandTimeout();
     }
 }
