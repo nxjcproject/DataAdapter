@@ -420,7 +420,7 @@ namespace SqlServerDataAdapter
         public int Update(string tableName, DataTable sourceTable, string[] keyColumnName)
         {
             int result;
-            string[] columns = TranslateHelper.GetDataTableColumnName(sourceTable, keyColumnName);
+            string[] columns = TranslateHelper.GetDataTableColumnName(sourceTable, keyColumnName, "Update");
 
             using (SqlConnection conn = new SqlConnection(ConnectionString))
             {
@@ -461,7 +461,7 @@ namespace SqlServerDataAdapter
         public int Insert(string tableName, DataTable sourceTable, string[] excludeColumnName)
         {
             int result;
-            string[] columns = TranslateHelper.GetDataTableColumnName(sourceTable, excludeColumnName);
+            string[] columns = TranslateHelper.GetDataTableColumnName(sourceTable, excludeColumnName, "Insert");
 
             using (SqlConnection conn = new SqlConnection(ConnectionString))
             {

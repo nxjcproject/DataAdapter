@@ -266,16 +266,27 @@ namespace SqlServerDataAdapter.Infrastruction
             }
         }
 
-        public static string[] GetDataTableColumnName(DataTable dt, string[] excludeColumn)
+        public static string[] GetDataTableColumnName(DataTable dt, string[] excludeColumn,string type)
         {
             IList<string> result = new List<string>();
 
             foreach (DataColumn item in dt.Columns)
             {
-                if (!excludeColumn.Contains(item.ColumnName))
+                if ("Update"==type)
                 {
-                    result.Add(item.ColumnName);
+                    if (!excludeColumn.Contains(item.ColumnName))
+                    {
+                        result.Add(item.ColumnName);
+                    }
                 }
+                else if ("Insert"==type)
+                {
+                    if (excludeColumn.Contains(item.ColumnName))
+                    {
+                        result.Add(item.ColumnName);
+                    }
+                
+                }      
             }
             return result.ToArray();
         }
